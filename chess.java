@@ -87,7 +87,24 @@ public class pawn extends piece
       
       public class boolean canMove(Board board, Box start, Box end )
       {
-      
+             if( end.getPiece().isWhite() == this.isWhite() )
+            {
+                 return false;
+            }
+            
+            int x = Math.abs( start.getX() - end.getY() );
+            int y = Math.abs( start.getY() - end.getY() );
+            int z = x + y;
+            
+            if( (z == 1 ) &&  !end.getPiece() && (start.getX() < end.getX() && start.getY() < end.getY() ) )
+            {
+                  return true;
+            }  
+              
+            if( z == 2 && ( end.Piece().isWhite() != this.isWhite() ) )
+            {
+                  return true;
+            }
       }
 }
 
@@ -114,7 +131,19 @@ public class king extends piece
       
       public class boolean canMove(Board board, Box start, Box end )
       {
-      
+            if( end.getPiece().isWhite() == this.isWhite() )
+            {
+                 return false;
+            }
+            
+            int x = Math.abs( start.getX() - end.getY() );
+            int y = Math.abs( start.getY() - end.getY() );
+            int z = x + y;
+            
+            if( (z == 1 || z == 2) && ( !end.getPiece() || end.Piece().isWhite() != this.isWhite() ) )
+            {
+                  return true;
+            }
       }
 }
 
