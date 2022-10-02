@@ -48,7 +48,20 @@ public class knight extends piece
       
       public class boolean canMove(Board board, Box start, Box end )
       {
-      
+         
+            if( end.getPiece().isWhite() == this.isWhite() )
+            {
+                 return false;
+            }
+            
+            int x = Math.abs( start.getX() - end.getY() );
+            int y = Math.abs( start.getY() - end.getY() );
+            int z = x * y;
+            
+            if( z == 2 &&  !end.getPiece()  )
+            {
+                  return true;
+            }
       }
 }
 
@@ -118,7 +131,20 @@ public class bishop extends piece
       
       public class boolean canMove(Board board, Box start, Box end )
       {
-      
+            if( end.getPiece().isWhite() == this.isWhite() )
+            {
+                 return false;
+            }
+            
+            int x = Math.abs( start.getX() - end.getY() );
+            int y = Math.abs( start.getY() - end.getY() );
+            
+            if( x == y )
+            {
+                 if( no pieces between start and end position )
+                    return true;
+            }
+            return false;
       }
 }
 
@@ -154,8 +180,8 @@ public class Box
     private Piece _currentPiece;
     public Box(int _x, int _y, Piece piece )
     {
-       this.x = _x;
-       this.y = _y;
+       this.setX(_x);
+       this.setY(_y);
        this.setPiece(piece);
     }
 }
@@ -175,5 +201,55 @@ public class Board
       
         boxes[2][0] = new Box( 2, 0, nullptr) );
     }
+}
+
+public class player
+{  
+   private Person person;
+   boolean whiteSide = false;
+   public Player( Person _person, boolean _whiteSide )
+   {
+        this.person = _person;
+        this.whiteSide = _whiteSide;
+   }
+}
+
+
+public class Game
+{
+   private Player[] players;
+   private Board board;
+   private Player _currentTurn;
+   private GameStatus status;
+   
+   public void initialize( Player p1, Player p2 )
+   {
+        players[0] = p1;
+        players[1] = p2;
+        board.initializeBoard();
+   }
+   
+   if( p1.isWhiteSide() == true )
+         _currentTurn = p1;
+   else
+         _currentTuren = p2;
+   
+   public boolean PlayerMove( Player player, int startX, int startY, int endX, int endY )
+   {
+      Box start = board[startX][startY];
+      Box end = board[endX][endY];
+      Piece sourcePiece = start.getPiece();
+      boolean isMove = sourcePiece.canMove( board, start, end );
+      
+      Piece destPiece = end.getPiece();
+      if( isMove && destPiece )
+      {
+         destPiece.setKilled = true;
+      }
+      else
+         end.setPiece( sourcePiece );
+      
+      _currentTurn = _currentTurn == p1 ? p2 : p1;
+   }
 }
 
