@@ -3,7 +3,8 @@
 using namespace std;
 int main()
 {
-    Board b(4, 16);
+    Player p("sunny", 1);
+    Board b(4, 16, p);
     b.initialize();
     b.startGame();
     return 0;
