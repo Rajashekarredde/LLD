@@ -93,25 +93,41 @@ class Board
         {
             int n = box.size();
             int m = box[0].size();
-            for( int i = 0; i <n; i++ )
+            for( int i = 0; i<n; i++ )
             {
-                for( int j = 1; j<m; j++ )
-                { 
+                for( int j = m-1; j >= 0; j-- )
+                {
                     int k = j;
-                    while(  k>0 && box[i][k].currentDigit() && 
-                             box[i][k].currentDigit() == box[i][k-1].currentDigit() )
+                    while( k<m-1 )
                     {
-                        box[i][k-1].setDigit( box[i][k].currentDigit()*2 );
-                        box[i][k].setDigit(0);
-                        k--;
+                        if( !box[i][k+1].currentDigit()  && box[i][k].currentDigit() )
+                        {
+                            box[i][k+1].setDigit( box[i][k].currentDigit() );
+                            box[i][k].setDigit(0); 
+                        }
+                        k++;
                     }
-                    
-                    while( k>0 && box[i][k].currentDigit() && !box[i][k-1].currentDigit() )
+                }
+                
+                int k = m-1;
+                while( k > 0 )
+                {
+                    if( box[i][k-1].currentDigit()  == box[i][k].currentDigit() )
                     {
-                        box[i][k-1].setDigit( box[i][k].currentDigit() );
-                        box[i][k].setDigit(0);
-                        k--;
+                        box[i][k].setDigit( box[i][k].currentDigit() * 2 );
+                        box[i][k-1].setDigit( 0 );
+                        int t = 0;
+                        while( t < k-1 )
+                        {
+                            if( !box[i][t+1].currentDigit()  && box[i][t].currentDigit() )
+                            {
+                                box[i][t+1].setDigit( box[i][t].currentDigit() );
+                                box[i][t].setDigit(0); 
+                            }
+                            t++;
+                        }
                     }
+                    k--;
                 }
             }
         }
@@ -120,25 +136,41 @@ class Board
         {
             int n = box.size();
             int m = box[0].size();
-            for( int i = n-1; i >=0; i-- )
+            for( int i = 0; i<n; i++ )
             {
-                for( int j = m-2; j>=0; j-- )
-                { 
+                for( int j = 0; j < m; j++ )
+                {
                     int k = j;
-                    while(  k < m-1 && box[i][k].currentDigit() && 
-                             box[i][k].currentDigit() == box[i][k+1].currentDigit() )
+                    while( k > 0 )
                     {
-                        box[i][k+1].setDigit( box[i][k].currentDigit()*2 );
-                        box[i][k].setDigit(0);
-                        k++;
+                        if( !box[i][k-1].currentDigit()  && box[i][k].currentDigit() )
+                        {
+                            box[i][k-1].setDigit( box[i][k].currentDigit() );
+                            box[i][k].setDigit(0); 
+                        }
+                        k--;
                     }
-                    
-                    while( k < m-1 && box[i][k].currentDigit() && !box[i][k+1].currentDigit() )
+                }
+                
+                int k = 0;
+                while( k < m )
+                {
+                    if( box[i][k+1].currentDigit()  == box[i][k].currentDigit() )
                     {
-                        box[i][k+1].setDigit( box[i][k].currentDigit() );
-                        box[i][k].setDigit(0);
-                        k++;
+                        box[i][k].setDigit( box[i][k].currentDigit() * 2 );
+                        box[i][k+1].setDigit( 0 );
+                        int t = k+1;
+                        while( t < m )
+                        {
+                            if( !box[i][t-1].currentDigit()  && box[i][t].currentDigit() )
+                            {
+                                box[i][t-1].setDigit( box[i][t].currentDigit() );
+                                box[i][t].setDigit(0); 
+                            }
+                            t++;
+                        }
                     }
+                    k++;
                 }
             }
         }
