@@ -7,12 +7,14 @@ class Board
 {
     int boardSize;
     int emptyCells;
+    Player p;
     vector< vector<Box> >box;
     public :
-        Board( int _size, int cells )
+        Board( int _size, int cells, Player p )
         {
             this->boardSize = _size;
             this->emptyCells = cells;
+            this->p = p;
         }
         
         void initialize()
@@ -35,7 +37,7 @@ class Board
         void startGame()
         {
             char ch;
-            while( emptyCells )
+            while( 1 )
             {
                 cout<<"Enter your side : ";
                 cin>>ch;
@@ -50,7 +52,37 @@ class Board
                 
                 insertRandom();
                 printState();
+                cout<<endl;
+                cout<<"Player : "<<p.getPlayerName()<<"  -->  "<<p.getScore()<<endl;
+                
+                if( isWon() )
+                {
+                    cout<<"You Won !!!!!"<<endl;
+                    break;
+                }
+                else if( !getEmptyCells().size() )
+                {
+                    cout<<"You Lost !!!!!"<<endl;
+                    break;
+                }
+                
             }
+        }
+        
+        bool isWon()
+        {
+            int n = box.size();
+            int m = box[0].size();
+            
+            for(int i =0; i<n; i++)
+            {
+                for( int j = 0; j<m; j++ )
+                {
+                   if( box[i][j].currentDigit() == 2048 )
+                        return true;
+                }
+            }
+            return false;
         }
         
         void printState()
@@ -62,10 +94,27 @@ class Board
             {
                 for( int j = 0; j<m; j++ )
                 {
-                    cout<<box[i][j].currentDigit()<<" ";
+                    cout<<box[i][j].currentDigit()<<"   ";
                 }
                 cout<<endl;
             }
+        }
+        
+        
+        vector< pair<int, int> >getEmptyCells()
+        {
+            int n = box.size();
+            int m = box[0].size();
+            vector< pair<int, int > >temp;
+            for( int i = 0; i<n; i++ )
+            {
+                for( int j = 0; j<m; j++ )
+                {
+                    if( !box[i][j].currentDigit() )
+                        temp.push_back( {i, j} );
+                }
+            }
+            return temp;
         }
         
         void insertRandom()
@@ -74,18 +123,8 @@ class Board
             char arrayNum[2] = {2, 4};
             int idx = rand() % 2;
             
-            int n = box.size();
-            int m = box[0].size();
+            vector< pair<int, int > >emptySpaces = getEmptyCells();
             
-            vector< pair<int, int > >emptySpaces;
-            for( int i = 0; i<n; i++ )
-            {
-                for( int j = 0; j<m; j++ )
-                {
-                    if( !box[i][j].currentDigit() )
-                        emptySpaces.push_back( {i, j} );
-                }
-            }
             int maxi = emptySpaces.size()-1;
             int mini = 0;
             int empty_idx = rand()%(maxi-mini + 1) + mini;
@@ -93,7 +132,7 @@ class Board
             box[it.first][it.second].setDigit( arrayNum[idx] );
         }
         
-        void moveLeft()
+        void moveRight()
         {
             int n = box.size();
             int m = box[0].size();
@@ -118,6 +157,7 @@ class Board
                 {
                     if( box[i][k-1].currentDigit()  == box[i][k].currentDigit() )
                     {
+                        p.addScore( box[i][k].currentDigit() * 2 ); 
                         box[i][k].setDigit( box[i][k].currentDigit() * 2 );
                         box[i][k-1].setDigit( 0 );
                         int t = 0;
@@ -136,7 +176,7 @@ class Board
             }
         }
         
-        void moveRight()
+        void moveLeft()
         {
             int n = box.size();
             int m = box[0].size();
@@ -161,6 +201,7 @@ class Board
                 {
                     if( box[i][k+1].currentDigit()  == box[i][k].currentDigit() )
                     {
+                        p.addScore( box[i][k].currentDigit() * 2 ); 
                         box[i][k].setDigit( box[i][k].currentDigit() * 2 );
                         box[i][k+1].setDigit( 0 );
                         int t = k+1;
@@ -204,6 +245,7 @@ class Board
                 {
                     if( box[k+1][i].currentDigit()  == box[k][i].currentDigit() )
                     {
+                        p.addScore( box[k][i].currentDigit() * 2 ); 
                         box[k][i].setDigit( box[k][i].currentDigit() * 2 );
                         box[k+1][i].setDigit( 0 );
                         int t = k+1;
@@ -247,6 +289,7 @@ class Board
                 {
                     if( box[k-1][i].currentDigit()  == box[k][i].currentDigit() )
                     {
+                        p.addScore( box[k][i].currentDigit() * 2 ); 
                         box[k][i].setDigit( box[k][i].currentDigit() * 2 );
                         box[k-1][i].setDigit( 0 );
                         int t = 0;
