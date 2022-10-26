@@ -43,6 +43,10 @@ class Board
                     moveLeft();
                 else if( ch == 'r' )
                     moveRight();
+                else if( ch == 'd' )
+                    moveDown();
+                else if( ch == 'u' )
+                    moveUp();
                 
                 insertRandom();
                 printState();
@@ -171,6 +175,92 @@ class Board
                         }
                     }
                     k++;
+                }
+            }
+        }
+        
+        void moveUp()
+        {
+            int n = box.size();
+            int m = box[0].size();
+            for( int i = 0; i<n; i++ )
+            {
+                for( int j = 0; j < m; j++ )
+                {
+                    int k = j;
+                    while( k > 0 )
+                    {
+                        if( !box[k-1][i].currentDigit()  && box[k][i].currentDigit() )
+                        {
+                            box[k-1][i].setDigit( box[k][i].currentDigit() );
+                            box[k][i].setDigit(0); 
+                        }
+                        k--;
+                    }
+                }
+                
+                int k = 0;
+                while( k < m-1 )
+                {
+                    if( box[k+1][i].currentDigit()  == box[k][i].currentDigit() )
+                    {
+                        box[k][i].setDigit( box[k][i].currentDigit() * 2 );
+                        box[k+1][i].setDigit( 0 );
+                        int t = k+1;
+                        while( t < m )
+                        {
+                            if( !box[t-1][i].currentDigit()  && box[t][i].currentDigit() )
+                            {
+                                box[t-1][i].setDigit( box[t][i].currentDigit() );
+                                box[t][i].setDigit(0); 
+                            }
+                            t++;
+                        }
+                    }
+                    k++;
+                }
+            }
+        }
+        
+        void moveDown()
+        {
+            int n = box.size();
+            int m = box[0].size();
+            for( int i = 0; i<m; i++ )
+            {
+                for( int j = n-1; j >= 0; j-- )
+                {
+                    int k = j;
+                    while( k<m-1 )
+                    {
+                        if( !box[k+1][i].currentDigit()  && box[k][i].currentDigit() )
+                        {
+                            box[k+1][i].setDigit( box[k][i].currentDigit() );
+                            box[k][i].setDigit(0); 
+                        }
+                        k++;
+                    }
+                }
+                
+                int k = m-1;
+                while( k > 0 )
+                {
+                    if( box[k-1][i].currentDigit()  == box[k][i].currentDigit() )
+                    {
+                        box[k][i].setDigit( box[k][i].currentDigit() * 2 );
+                        box[k-1][i].setDigit( 0 );
+                        int t = 0;
+                        while( t < k-1 )
+                        {
+                            if( !box[t+1][i].currentDigit()  && box[t][i].currentDigit() )
+                            {
+                                box[t+1][i].setDigit( box[t][i].currentDigit() );
+                                box[t][i].setDigit(0); 
+                            }
+                            t++;
+                        }
+                    }
+                    k--;
                 }
             }
         }
