@@ -95,15 +95,15 @@ class Gameboard
                }
                
                bool isRightDiagonal = true;
-               i=boardSize-1, j = boardSize-1;
-               while( i >= 0 && j >= 0 )
+               i=0, j = boardSize-1;
+               while( i < boardSize  && j >= 0 )
                {
                    if( box[i][j].getSign() != box[start][end].getSign() )
                    { 
                         isRightDiagonal = false;
                         break;
                    }
-                   i--; j--;
+                   i++; j--;
                }
                
                if( isRightDiagonal || isLeftDiagonal || isColumn || isRow )
